@@ -2,8 +2,11 @@ from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.database import engine, get_db
 from app import models
-from app.schemas import PostCreate, PostResponse, UserCreate
+from app.schemas import PostCreate, PostResponse, UserCreate, UserOut
 from typing import List
+from app.utils import hash_password
+
+
 
 # creates all tables defined in models.py if they don't already exist
 # equivalent to running the CREATE TABLE sql manually in the raw version
@@ -64,7 +67,16 @@ def delete_post(id: int, db: Session = Depends(get_db)):
     query.delete(synchronize_session=False)  # DELETE FROM posts WHERE id = %s
     db.commit()
 
-@app.post("/users", status_code=201)
+@app.post("/users", status_code=201, response_model = UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    
+    #hash the password
+    
+    user.password = hash_password(user.password)
 
+    new_user = models.User(**user.model_dump())
+    db.add(new_user)      
+    db.commit()           
+    db.refresh(new_user) 
+    return new_user
     

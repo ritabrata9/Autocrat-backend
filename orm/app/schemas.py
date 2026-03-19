@@ -27,3 +27,13 @@ class PostResponse(BaseModel):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
+class UserOut(BaseModel):
+    id:int
+    email:EmailStr
+
+    class Config:
+        from_attributes = True
+
+
+    
