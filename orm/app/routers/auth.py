@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, status, HTTPException, Response
+# CONTAINS ROUTES FOR AUTH OPS SUCH AS LOGIN ETC
+
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.schemas import UserLogin
 from app.database import get_db
-from app.utils import hash_password
 from app import models, oauth2
 from app.utils import verify_pwd
 
