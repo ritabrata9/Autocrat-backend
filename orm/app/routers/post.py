@@ -4,6 +4,7 @@ from app import models, oauth2
 from app.schemas import PostCreate, PostResponse
 from typing import List
 from fastapi import HTTPException, Depends, APIRouter
+from typing import Optional
 
 router = APIRouter(
     prefix = "/posts",
@@ -15,24 +16,15 @@ router = APIRouter(
 # Depends(get_db) injects a fresh database session for this request
 # List[PostResponse] tells FastAPI to serialize each result using PostResponse
 @router.get("/", response_model=List[PostResponse])
-def get_posts(db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
+def get_posts(db: Session = Depends(get_db), limit : int = 10, search : Optional[str] = ""):
 
-    posts = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
+    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).all()
     return posts
-
-
-# #! GET /posts/{id} — returns a single post by id
-# @router.get("/{id}", response_model=PostResponse)
-# def get_post(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-#     post = db.query(models.Post).filter(models.Post.id == id).first()  # SELECT * FROM posts WHERE id = %s
-#     if not post:
-#         raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
-#     return post
 
 
 #! POST /posts — CREATES a new post from the request body
 # status 201 = Created
-@router.post("", status_code=201, response_model=PostResponse)
+@router.post("/", status_code=201, response_model=PostResponse)
 def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # unpack the Pydantic model into the SQLAlchemy model using **post.model_dump()
     # equivalent to: Post(title=post.title, content=post.content, published=post.published)
@@ -44,6 +36,10 @@ def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: m
     db.commit()           # write to the database
     db.refresh(new_post)  # fetch the saved row back (needed to get the auto-generated id and created_at)
     return new_post
+
+
+
+
 
 
 #! PUT /posts/{id} — overwrites all fields of an existing post
@@ -78,3 +74,5 @@ def delete_post(id: int, db: Session = Depends(get_db), current_user: models.Use
 
     query.delete(synchronize_session=False)  # DELETE FROM posts WHERE id = %s
     db.commit()
+
+

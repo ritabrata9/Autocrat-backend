@@ -50,4 +50,14 @@ class PostResponse(BaseModel):
     # without this, Pydantic wouldn't know how to parse an ORM object
     class Config:
         from_attributes = True
+
+
+class VoteResponse(BaseModel):
+    user_id: int
+    post_id: int
+
+    class Config:
+        form_attributes = True
+
+
     
