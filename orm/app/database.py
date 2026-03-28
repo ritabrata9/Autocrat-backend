@@ -7,12 +7,7 @@ from pathlib import Path
 # load credentials from .env file
 load_dotenv(dotenv_path=Path('.') / '.env')
 
-# build the connection URL from env vars
-# format: postgresql://user:password@host:port/dbname
-DATABASE_URL = (
-    f"postgresql://{os.getenv('DATABASE_USERNAME')}:{os.getenv('DATABASE_PASSWORD')}"
-    f"@{os.getenv('DATABASE_HOSTNAME')}:{os.getenv('DATABASE_PORT')}/{os.getenv('DATABASE_NAME')}"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set")
