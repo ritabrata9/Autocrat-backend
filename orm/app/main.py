@@ -12,7 +12,12 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-origins = ["*"]
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://autocrat-frontend-five.vercel.app"
+]
+
 
 app.add_middleware(
     CORSMiddleware,
