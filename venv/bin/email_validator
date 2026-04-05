@@ -1,4 +1,4 @@
-#!/home/ritabrata/CodeProjects/backend/social-media/venv/bin/python3
+#!/home/ritabrata/CodeProjects/web-projects/Autocrat/backend/venv/bin/python3
 import sys
 from email_validator.__main__ import main
 if __name__ == '__main__':

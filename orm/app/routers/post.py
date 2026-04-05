@@ -5,7 +5,6 @@ from app.schemas import PostCreate, PostResponse
 from typing import List, Optional
 from fastapi import HTTPException, Depends, APIRouter
 
-from app.utilities.moderation import is_disallowed
 
 router = APIRouter(
     prefix="/posts",
@@ -26,21 +25,12 @@ def get_posts(db: Session = Depends(get_db), limit: int = 10, search: Optional[s
 #! POST /posts — CREATES a new post from the request body
 # status 201 = Created
 @router.post("/", status_code=201, response_model=PostResponse)
-def create_post(
-    post: PostCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(oauth2.get_current_user)
-):
+def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # unpack the Pydantic model into the SQLAlchemy model using **post.model_dump()
     # equivalent to: Post(title=post.title, content=post.content, published=post.published)
 
     text = f"{post.title} {post.content}"
 
-    if is_disallowed(text):
-        raise HTTPException(
-            status_code=403,
-            detail="Post rejected: Disrespect towards the Supreme Leader is not allowed."
-        )
 
     new_post = models.Post(
         **post.model_dump(),
@@ -70,15 +60,6 @@ def update_post(
 
     if existing_post.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorised")
-
-    # moderation check on updated content
-    text = f"{post.title} {post.content}"
-
-    if is_disallowed(text):
-        raise HTTPException(
-            status_code=403,
-            detail="Update rejected: Disrespect towards supreme leader is not allowed."
-        )
 
     query.update(post.model_dump(), synchronize_session=False)  # UPDATE posts SET ... WHERE id = %s
     db.commit()

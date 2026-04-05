@@ -3,13 +3,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
 from app import models
 from app.routers import post, user, auth, likes
+import time
+from sqlalchemy.exc import OperationalError
 
 
 
 # creates all tables defined in models.py if they don't already exist
 # equivalent to running the CREATE TABLE sql manually in the raw version
-models.Base.metadata.create_all(bind=engine)
-
+for _ in range(10):
+    try:
+        models.Base.metadata.create_all(bind=engine)
+        break
+    except OperationalError:
+        time.sleep(2)
+        
 app = FastAPI()
 
 origins = [
