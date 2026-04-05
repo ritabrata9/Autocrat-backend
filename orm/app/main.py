@@ -19,11 +19,7 @@ for _ in range(10):
         
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "https://autocrat-frontend-five.vercel.app"
-]
+origins = ["*"]
 
 
 app.add_middleware(
