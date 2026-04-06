@@ -17,17 +17,6 @@ from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
-# # load credentials from .env file
-# load_dotenv(dotenv_path=Path('.') / '.env')
-
-
-# os.getenv('DATABASE_USERNAME')
-
-
-
-# SECRET_KEY
-# algo = hs256
-# expiration time
 
 # generate using command:= openssl rand -hex 32    (bash)
 SECRET_KEY = "62bc94dd8c55da1738cfc40b8c32bffce6707d70ad5d680e7b42560cffa71380"
@@ -38,7 +27,7 @@ def create_access_token(data: dict):
     to_encode = data.copy()
     
     expire = datetime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRE_MINUTES)
-    # thus exp = current_time + 30 mins
+    # exp = current_time + 30 mins
 
     # → put a new key "exp" into to_encode
     # → set its value to expire   
@@ -52,9 +41,7 @@ def create_access_token(data: dict):
 def verify_access_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print("PAYLOAD:", payload)
         id = payload.get("user_id")
-        print("ID:", id)
         if id is None:
             raise credentials_exception
         token_data = TokenData(id=id)
