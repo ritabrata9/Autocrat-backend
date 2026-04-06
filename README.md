@@ -1,4 +1,3 @@
-```markdown
 # Autocrat Backend
 
 Backend service for **Autocrat**, a social platform API built using FastAPI.  
@@ -307,6 +306,3 @@ Authorization: Bearer <token>
 ## Author
 
 Ritabrata
-
-```
-```
