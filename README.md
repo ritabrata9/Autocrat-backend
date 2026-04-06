@@ -1,3 +1,4 @@
+```markdown
 # Autocrat Backend
 
 Backend service for **Autocrat**, a social platform API built using FastAPI.  
@@ -30,41 +31,43 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 
 ## Project Structure
 
+```
 
 autocrat-backend/
 │
 ├── orm/
-│ ├── app/
-│ │ ├── __init__.py
-│ │ ├── main.py
-│ │ ├── database.py
-│ │ ├── models.py
-│ │ ├── schemas.py
-│ │ ├── oauth2.py
-│ │ ├── utils.py
-│ │ └── routers/
-│ │ ├── auth.py
-│ │ ├── user.py
-│ │ ├── post.py
-│ │ └── likes.py
-│ │
-│ ├── alembic/
-│ ├── tests/
-│ ├── Dockerfile
-│ ├── docker-compose-dev.yaml
-│ ├── docker-compose-prod.yaml
-│ └── requirements.txt
+│   ├── app/
+│   │   ├── **init**.py
+│   │   ├── main.py
+│   │   ├── database.py
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   ├── oauth2.py
+│   │   ├── utils.py
+│   │   └── routers/
+│   │       ├── auth.py
+│   │       ├── user.py
+│   │       ├── post.py
+│   │       └── likes.py
+│   │
+│   ├── alembic/
+│   ├── tests/
+│   ├── Dockerfile
+│   ├── docker-compose-dev.yaml
+│   ├── docker-compose-prod.yaml
+│   └── requirements.txt
 │
 ├── non-orm/
-│ └── app/
-│ ├── main.py
-│ ├── database.py
-│ ├── models.py
-│ └── schemas.py
+│   └── app/
+│       ├── main.py
+│       ├── database.py
+│       ├── models.py
+│       └── schemas.py
 │
 ├── requirements.txt
 └── .gitignore
 
+````
 
 ---
 
@@ -108,117 +111,202 @@ python -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+````
 
-Create .env file:
+### Create `.env` file
 
+```
 DATABASE_URL=postgresql://user:password@localhost:5432/autocrat
 SECRET_KEY=your_secret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
 
-Run server:
+### Run server
 
+```bash
 uvicorn app.main:app --reload
-Docker Setup
+```
 
-Development:
+---
 
+## Docker Setup
+
+### Development
+
+```bash
 docker-compose -f docker-compose-dev.yaml up --build
+```
 
-Production:
+### Production
 
+```bash
 docker-compose -f docker-compose-prod.yaml up --build
-Database Migrations (Alembic)
+```
+
+---
+
+## Database Migrations (Alembic)
+
+```bash
 alembic revision -m "message"
 alembic upgrade head
-API Overview
-Auth
-POST /login
-Users
-POST /users
-GET /users/{id}
-Posts
-GET /posts
-POST /posts
-DELETE /posts/{id}
-Likes
-POST /like
-Authentication Flow
-User logs in → receives JWT
-Token is sent in headers:
+```
+
+---
+
+## API Overview
+
+### Auth
+
+* `POST /login`
+
+### Users
+
+* `POST /users`
+* `GET /users/{id}`
+
+### Posts
+
+* `GET /posts`
+* `POST /posts`
+* `DELETE /posts/{id}`
+
+### Likes
+
+* `POST /like`
+
+---
+
+## Authentication Flow
+
+1. User logs in → receives JWT
+2. Token is sent in headers:
+
+```
 Authorization: Bearer <token>
-Protected routes validate token
-Sample API Responses
-Login
+```
 
-Request
+3. Protected routes validate token
 
+---
+
+## Sample API Responses
+
+### Login
+
+**Request**
+
+```json
 {
   "username": "test@example.com",
   "password": "password123"
 }
+```
 
-Response
+**Response**
 
+```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "token_type": "bearer"
 }
-Create User
+```
 
-Request
+---
 
+### Create User
+
+**Request**
+
+```json
 {
   "email": "user@example.com",
   "password": "password123"
 }
+```
 
-Response
+**Response**
 
+```json
 {
   "id": 1,
   "email": "user@example.com",
   "created_at": "2026-04-06T12:00:00Z"
 }
-Create Post
+```
 
-Request
+---
 
+### Create Post
+
+**Request**
+
+```json
 {
   "title": "My First Post",
   "content": "This is a post"
 }
+```
 
-Response
+**Response**
 
+```json
 {
   "id": 1,
   "title": "My First Post",
   "content": "This is a post",
   "owner_id": 1
 }
-Like / Unlike
+```
 
-Request
+---
 
+### Like / Unlike
+
+**Request**
+
+```json
 {
   "post_id": 1,
   "dir": 1
 }
+```
 
-Response
+**Response**
 
+```json
 {
   "message": "successfully added like"
 }
-Design Decisions
-Separate ORM and non-ORM implementations to demonstrate depth
-Modular routers for scalability
-JWT-based stateless authentication
-Dockerized environment for consistency
-Alembic for schema versioning
+```
 
+---
 
-Author
+## Design Decisions
+
+* Separate ORM and non-ORM implementations to demonstrate depth
+* Modular routers for scalability
+* JWT-based stateless authentication
+* Dockerized environment for consistency
+* Alembic for schema versioning
+
+---
+
+## Future Improvements
+
+* Pagination and filtering
+* Role-based access control
+* Redis caching
+* Rate limiting
+* WebSockets
+* CI/CD pipeline
+
+---
+
+## Author
 
 Ritabrata
+
+```
+```
