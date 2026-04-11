@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.database import get_db
 from app import models, oauth2
 from app.schemas import PostCreate, PostResponse
@@ -17,13 +17,17 @@ router = APIRouter(
 # List[PostResponse] tells FastAPI to serialize each result using PostResponse
 @router.get("/", response_model=List[PostResponse])
 def get_posts(db: Session = Depends(get_db), limit: int = 10, search: Optional[str] = ""):
+    
+    posts = db.query(models.Post)\
+        .options(joinedload(models.Post.user))\
+        .filter(models.Post.title.contains(search))\
+        .limit(limit)\
+        .all()
 
-    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).all()
     return posts
 
 
 #! POST /posts — CREATES a new post from the request body
-# status 201 = Created
 @router.post("/", status_code=201, response_model=PostResponse)
 def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # unpack the Pydantic model into the SQLAlchemy model using **post.model_dump()
@@ -65,11 +69,7 @@ def update_post(id: int, post: PostCreate, db: Session = Depends(get_db), curren
 #! DELETE /posts/{id} — deletes a post by id
 # status 204 = No Content — success with no response body
 @router.delete("/{id}", status_code=204)
-def delete_post(
-    id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(oauth2.get_current_user)
-):
+def delete_post(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
 
     query = db.query(models.Post).filter(models.Post.id == id)
 

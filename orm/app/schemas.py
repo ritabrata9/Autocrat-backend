@@ -1,72 +1,63 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional
 
-
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
     email: EmailStr
+
+class UserCreate(UserBase):
     password: str
 
-class UserOut(BaseModel):
-    id:int
-    email:EmailStr
+class UserOut(UserBase):
+    id: int
+    
+    # Tells Pydantic to read data from SQLAlchemy model attributes
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
-
-class UserLogin(BaseModel):
-    email:EmailStr
-    password:str
+class UserLogin(UserBase):
+    password: str
 
 
 class Token(BaseModel):
-    access_token : str
-    token_type : str
+    access_token: str
+    token_type: str
 
 class TokenData(BaseModel):
-    id : Optional[int] = None
+    id: Optional[int] = None
 
 
-class PostCreate(BaseModel):
-    title: str
+class PostBase(BaseModel):
+    title: str 
     content: str
     published: bool = True
 
+class PostCreate(PostBase):
+    pass
 
-
-class PostResponse(BaseModel):
+class PostResponse(PostBase):
     id: int
-    title: str
-    content: str
-    published: bool
     created_at: datetime  
     user_id: int
     user: UserOut
     like_count: int
 
-    # tells Pydantic to read data from SQLAlchemy model attributes
-    # without this, Pydantic wouldn't know how to parse an ORM object
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class VoteResponse(BaseModel):
     user_id: int
     post_id: int
 
-
-class CommentIn(BaseModel):
+class CommentBase(BaseModel):
     content: str
 
-class CommentOut(BaseModel):
+class CommentIn(CommentBase):
+    pass
+
+class CommentOut(CommentBase):
     user_id: int
     post_id: int
-    content: str
     created_at: datetime
     user: UserOut
 
-    class Config:
-        from_attributes = True
-
-
-    
+    model_config = ConfigDict(from_attributes=True)
