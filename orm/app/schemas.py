@@ -54,8 +54,19 @@ class VoteResponse(BaseModel):
     user_id: int
     post_id: int
 
+
+class CommentIn(BaseModel):
+    content: str
+
+class CommentOut(BaseModel):
+    user_id: int
+    post_id: int
+    content: str
+    created_at: datetime
+    user: UserOut
+
     class Config:
-        form_attributes = True
+        from_attributes = True
 
 
     

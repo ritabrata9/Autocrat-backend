@@ -6,7 +6,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.database import engine, get_db
 from app import models
-from app.routers import post, user, auth, likes
+from app.routers import post, user, auth, likes, comments
 
 import time
 
@@ -22,7 +22,10 @@ for _ in range(10):
 
 app = FastAPI()
 
-origins = ["https://autocrat-ritabrata.vercel.app/"]
+origins = [
+    "https://autocrat-ritabrata.vercel.app/",
+    "*"
+    ]
 
 app.add_middleware(
     CORSMiddleware,

@@ -46,12 +46,7 @@ def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: m
 
 #! PUT /posts/{id} — overwrites all fields of an existing post
 @router.put("/{id}", response_model=PostResponse)
-def update_post(
-    id: int,
-    post: PostCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(oauth2.get_current_user)
-):
+def update_post(id: int, post: PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     query = db.query(models.Post).filter(models.Post.id == id)
     existing_post = query.first()
 

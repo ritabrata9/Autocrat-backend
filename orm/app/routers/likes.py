@@ -23,7 +23,8 @@ def get_my_likes(db: Session = Depends(get_db), current_user: models.User = Depe
 # ! LIKE
 @router.post("/{id}", status_code=status.HTTP_201_CREATED, response_model=VoteResponse)
 def like(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
-    # 1. SECURITY FIX: Check if the post actually exists before liking it!
+
+    # 1. Check if the post exists before liking it
     post = db.query(models.Post).filter(models.Post.id == id).first()
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {id} does not exist")
