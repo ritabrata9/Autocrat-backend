@@ -35,8 +35,7 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 autocrat-backend/
 │
 ├── orm/
-│   ├── app/
-│   │   ├── **init**.py
+│   ├── app/   
 │   │   ├── main.py
 │   │   ├── database.py
 │   │   ├── models.py
@@ -48,6 +47,7 @@ autocrat-backend/
 │   │       ├── user.py
 │   │       ├── post.py
 │   │       └── likes.py
+│   │       └── comments.py
 │   │
 │   ├── alembic/
 │   ├── tests/
@@ -88,13 +88,14 @@ autocrat-backend/
 
 ### Likes System
 - Like / unlike posts
-- Prevent duplicate likes
+
+### Comments System
+- Create/ Delete comments on posts
 
 ### Infrastructure
 - CORS configuration
 - Database session management
 - Environment-based configuration
-- Debug endpoint for DB inspection
 
 ---
 
@@ -174,6 +175,12 @@ alembic upgrade head
 ### Likes
 
 * `POST /like`
+
+### Comments
+
+* `POST /comments/{post_id}`
+* `DELETE /comments/{comment_id}`
+
 
 ---
 
@@ -281,6 +288,8 @@ Authorization: Bearer <token>
 ```
 
 ---
+
+
 
 ## Design Decisions
 
