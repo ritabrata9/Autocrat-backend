@@ -50,7 +50,7 @@ def deleteComment(id: int, db: Session = Depends(get_db), current_user: models.U
     if comment is None:
         raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
     
-    if comment.user_id != current_user.id:
+    if comment.user_id != current_user.id and current_user.role != "ADMIN":
         raise HTTPException(status_code=403, detail="Not authorised")
     
     query.delete(synchronize_session=False)

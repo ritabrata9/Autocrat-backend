@@ -24,6 +24,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[int] = None
+    role: str
 
 
 class PostBase(BaseModel):

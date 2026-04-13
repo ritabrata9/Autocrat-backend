@@ -1,6 +1,3 @@
-from dotenv import load_dotenv
-from pathlib import Path
-
 # jwt encodes and decodes jwt tokens
 from jose import JWTError, jwt
 
@@ -42,12 +39,17 @@ def verify_access_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id = payload.get("user_id")
+        role = payload.get("role")
+
         if id is None:
             raise credentials_exception
-        token_data = TokenData(id=id)
+        
+        token_data = TokenData(id=id, role=role)
+
     except JWTError as e:
         print("JWT ERROR:", e)
         raise credentials_exception
+    
     return token_data
     
 
@@ -59,7 +61,7 @@ def get_current_user(token:str = Depends(oauth2_scheme), db: Session = Depends(d
 
     user = db.query(models.User).filter(models.User.id == token.id).first()
 
+    if not user:
+        raise credentials_exception
+
     return user
-
-
-

@@ -57,7 +57,7 @@ def update_post(id: int, post: PostCreate, db: Session = Depends(get_db), curren
     if not existing_post:  # check if the row exists before updating
         raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
 
-    if existing_post.user_id != current_user.id:
+    if existing_post.user_id != current_user.id and current_user.role != "ADMIN":
         raise HTTPException(status_code=403, detail="Not authorised")
 
     query.update(post.model_dump(), synchronize_session=False)  # UPDATE posts SET ... WHERE id = %s
@@ -77,8 +77,8 @@ def delete_post(id: int, db: Session = Depends(get_db), current_user: models.Use
     if post is None:
         raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
 
-    if post.user_id != current_user.id:
+    if post.user_id != current_user.id and current_user.role != "ADMIN":
         raise HTTPException(status_code=403, detail="Not authorised")
 
-    query.delete(synchronize_session=False)  # DELETE FROM posts WHERE id = %s
+    db.delete(post)
     db.commit()
