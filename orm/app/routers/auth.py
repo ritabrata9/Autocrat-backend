@@ -19,10 +19,7 @@ def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session =
 
     user = db.query(models.User).filter(models.User.email == user_credentials.username.lower()).first()
 
-    if not user:
-        raise credentials_exception
-    
-    if not verify_pwd(user_credentials.password, user.password):
+    if not user or not verify_pwd(user_credentials.password, user.password):
         raise credentials_exception
         
     access_token = oauth2.create_access_token(

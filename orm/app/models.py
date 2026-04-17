@@ -10,8 +10,6 @@ class Post(Base):
     title      = Column(String, nullable=False)
     content    = Column(String, nullable=False)
     published  = Column(Boolean, server_default='TRUE', nullable=False)
-
-    # TIMESTAMP with timezone=True stores UTC time; server_default=text('now()') lets postgres set it automatically
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     like_count = Column(Integer, nullable=False, server_default="0")

@@ -1,4 +1,3 @@
-# utils.py
 import bcrypt
 
 def hash_password(password: str) -> str:

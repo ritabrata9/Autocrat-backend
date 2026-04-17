@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 #! GET /posts — returns all posts of a particular user
-# Depends(get_db) injects a fresh database session for this request
+# Depends(get_db) injects a database session for this request
 # List[PostResponse] tells FastAPI to serialize each result using PostResponse
 @router.get("/", response_model=List[PostResponse])
 def get_posts(db: Session = Depends(get_db), limit: int = 10, search: Optional[str] = ""):
@@ -30,11 +30,9 @@ def get_posts(db: Session = Depends(get_db), limit: int = 10, search: Optional[s
 #! POST /posts — CREATES a new post from the request body
 @router.post("/", status_code=201, response_model=PostResponse)
 def create_post(post: PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
+    
     # unpack the Pydantic model into the SQLAlchemy model using **post.model_dump()
     # equivalent to: Post(title=post.title, content=post.content, published=post.published)
-
-    text = f"{post.title} {post.content}"
-
 
     new_post = models.Post(
         **post.model_dump(),
