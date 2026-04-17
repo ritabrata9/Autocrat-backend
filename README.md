@@ -9,11 +9,11 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 
 - Dual architecture: ORM vs raw SQL implementation
 - JWT-based authentication (OAuth2 password flow)
-- Post creation, like/unlike system, and user management
+- Post creation, like/unlike, comments and user management
 - Alembic-based migrations
 - Dockerized development and production setup
 - Modular FastAPI structure with routers
-- Role-based access control
+- Role-based access control (ADMIN has control over all posts and users)
 
 
 ---
@@ -280,28 +280,6 @@ Authorization: Bearer <token>
   "message": "successfully added like"
 }
 ```
-
----
-
-
-
-## Design Decisions
-
-* Separate ORM and non-ORM implementations to demonstrate depth
-* Modular routers for scalability
-* JWT-based stateless authentication
-* Dockerized environment for consistency
-* Alembic for schema versioning
-
----
-
-## Future Improvements
-
-* Pagination and filtering
-* Redis caching
-* Rate limiting
-* WebSockets
-* CI/CD pipeline
 
 ---
 

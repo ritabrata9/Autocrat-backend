@@ -25,6 +25,7 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     role     = Column(String, nullable=False, server_default="USER")  # USER / ADMIN
+    bio = Column(String, nullable=False, server_default="I am an Autocrat User")
 
 class Votes(Base):
     __tablename__ = "votes"

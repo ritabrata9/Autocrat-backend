@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models, oauth2
-from app.schemas import UserCreate, UserOut
+from app.schemas import UserCreate, UserOut, BioUpdate
 from app.utils import hash_password
 from fastapi import HTTPException, Depends, APIRouter
 
@@ -43,4 +43,24 @@ def del_user(id: int, db: Session = Depends(get_db), current_user: models.User =
     
     db.delete(user)
     db.commit()
+
+
+@router.patch("/updatebio/{id}", status_code=200, response_model=UserOut)
+def update_bio(id: int, payload: BioUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):    
+    user = db.query(models.User).filter(models.User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User with id {id} not found")
     
+    if id != current_user.id and current_user.role != "ADMIN":
+        raise HTTPException(status_code=403, detail="Not authorised")
+    
+    user.bio = payload.bio
+    
+    db.commit()
+    db.refresh(user)
+
+    return user
+
+    
+
+        

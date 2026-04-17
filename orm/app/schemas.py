@@ -62,3 +62,6 @@ class CommentOut(CommentBase):
     user: UserOut
 
     model_config = ConfigDict(from_attributes=True)
+
+class BioUpdate(BaseModel):
+    bio: str
