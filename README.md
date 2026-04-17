@@ -36,7 +36,7 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 
 autocrat-backend/
 │
-├── orm/
+├── orm
 ├── 📁 alembic
 ├── 📁 app
 │   ├── 📁 routers
