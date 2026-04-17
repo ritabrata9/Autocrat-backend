@@ -13,6 +13,8 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 - Alembic-based migrations
 - Dockerized development and production setup
 - Modular FastAPI structure with routers
+- Role-based access control
+
 
 ---
 
@@ -35,36 +37,28 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 autocrat-backend/
 │
 ├── orm/
-│   ├── app/   
-│   │   ├── main.py
-│   │   ├── database.py
-│   │   ├── models.py
-│   │   ├── schemas.py
-│   │   ├── oauth2.py
-│   │   ├── utils.py
-│   │   └── routers/
-│   │       ├── auth.py
-│   │       ├── user.py
-│   │       ├── post.py
-│   │       └── likes.py
-│   │       └── comments.py
-│   │
-│   ├── alembic/
-│   ├── tests/
-│   ├── Dockerfile
-│   ├── docker-compose-dev.yaml
-│   ├── docker-compose-prod.yaml
-│   └── requirements.txt
-│
-├── non-orm/
-│   └── app/
-│       ├── main.py
-│       ├── database.py
-│       ├── models.py
-│       └── schemas.py
-│
-├── requirements.txt
-└── .gitignore
+├── 📁 alembic
+├── 📁 app
+│   ├── 📁 routers
+│   │   ├── 🐍 auth.py
+│   │   ├── 🐍 comments.py
+│   │   ├── 🐍 likes.py
+│   │   ├── 🐍 post.py
+│   │   └── 🐍 user.py
+│   ├── 🐍 __init__.py
+│   ├── 🐍 database.py
+│   ├── 🐍 main.py
+│   ├── 🐍 models.py
+│   ├── 🐍 oauth2.py
+│   ├── 🐍 schemas.py
+│   └── 🐍 utils.py
+├── 📁 tests
+│   └── 🐍 mytest.py
+├── 🐳 Dockerfile
+├── ⚙️ alembic.ini
+├── ⚙️ docker-compose-dev.yaml
+├── ⚙️ docker-compose-prod.yaml
+└── 📄 requirements.txt
 
 ````
 
@@ -304,7 +298,6 @@ Authorization: Bearer <token>
 ## Future Improvements
 
 * Pagination and filtering
-* Role-based access control
 * Redis caching
 * Rate limiting
 * WebSockets
