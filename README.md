@@ -33,23 +33,24 @@ The project demonstrates two parallel approaches to database interaction: **ORM 
 ## Project Structure
 
 ```
-
-autocrat-backend/
-│
-├── orm
 ├── 📁 alembic
 ├── 📁 app
+│   ├── 📁 core
+│   │   ├── 🐍 cloudinary_config.py
+│   │   └── 🐍 oauth2.py
+│   ├── 📁 db
+│   │   ├── 🐍 database.py
+│   │   └── 🐍 models.py
 │   ├── 📁 routers
 │   │   ├── 🐍 auth.py
 │   │   ├── 🐍 comments.py
 │   │   ├── 🐍 likes.py
-│   │   ├── 🐍 post.py
-│   │   └── 🐍 user.py
+│   │   ├── 🐍 posts.py
+│   │   └── 🐍 users.py
+│   ├── 📁 services
+│   │   └── 🐍 upload_service.py
 │   ├── 🐍 __init__.py
-│   ├── 🐍 database.py
 │   ├── 🐍 main.py
-│   ├── 🐍 models.py
-│   ├── 🐍 oauth2.py
 │   ├── 🐍 schemas.py
 │   └── 🐍 utils.py
 ├── 📁 tests
@@ -59,8 +60,7 @@ autocrat-backend/
 ├── ⚙️ docker-compose-dev.yaml
 ├── ⚙️ docker-compose-prod.yaml
 └── 📄 requirements.txt
-
-````
+```
 
 ---
 

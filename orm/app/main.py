@@ -6,7 +6,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.db.database import engine, get_db
 from app.db import models
-from app.routers import post, profile_pic, user, auth, likes, comments
+from app.routers import posts, auth, likes, comments, users
 
 import time
 
@@ -55,9 +55,9 @@ def debug_db(db: Session = Depends(get_db)):
         return {"error": str(e)}
 
 
-app.include_router(post.router)
-app.include_router(user.router)
+app.include_router(posts.router)
+app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(likes.router)
 app.include_router(comments.router)
-app.include_router(profile_pic.router)
+# app.include_router(profile_pic.router)

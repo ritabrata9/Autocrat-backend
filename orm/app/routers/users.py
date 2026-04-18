@@ -1,10 +1,11 @@
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
+from app.services.upload_service import upload_profile_pic
 from app.db.database import get_db
-from app.core import oauth2
 from app.db import models
+from app.core.oauth2 import get_current_user
 from app.schemas import UserCreate, UserOut, BioUpdate
 from app.utils import hash_password
-from fastapi import HTTPException, Depends, APIRouter
 
 router = APIRouter(
     prefix = "/users",
@@ -34,7 +35,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
 
 # * DELETE USER
 @router.delete("/{id}", status_code=204)
-def del_user(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
+def del_user(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
         raise HTTPException(status_code=404, detail=f"User with id {id} not found")
@@ -47,7 +48,7 @@ def del_user(id: int, db: Session = Depends(get_db), current_user: models.User =
 
 
 @router.patch("/updatebio/{id}", status_code=200, response_model=UserOut)
-def update_bio(id: int, payload: BioUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):    
+def update_bio(id: int, payload: BioUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):    
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
         raise HTTPException(status_code=404, detail=f"User with id {id} not found")
@@ -61,6 +62,31 @@ def update_bio(id: int, payload: BioUpdate, db: Session = Depends(get_db), curre
     db.refresh(user)
 
     return user
+
+
+# * UPLOAD PROFILE PIC
+@router.post("/profile-pic")
+def upload_dp(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    
+    image_url = upload_profile_pic(file.file, current_user.id)
+
+    current_user.profile_picture_url = image_url
+    db.commit()
+
+    return {"url": image_url}
+
+@router.patch("/profile-pic")
+def delete_profile_pic(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+       
+    if id != current_user.id and current_user.role != "ADMIN":
+        raise HTTPException(status_code=403, detail="Not authorised")
+    
+
+    current_user.profile_picture_url = None
+
+    db.commit()
+
+    return current_user
 
     
 
