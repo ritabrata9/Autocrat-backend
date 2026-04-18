@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
-from app.database import get_db
-from app import models, oauth2
+from app.db.database import get_db
+from app.core import oauth2
+from app.db import models
 from app.schemas import PostCreate, PostResponse
 from typing import List, Optional
 from fastapi import HTTPException, Depends, APIRouter

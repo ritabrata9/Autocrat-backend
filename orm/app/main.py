@@ -4,14 +4,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
-from app.database import engine, get_db
-from app import models
-from app.routers import post, user, auth, likes, comments
+from app.db.database import engine, get_db
+from app.db import models
+from app.routers import post, profile_pic, user, auth, likes, comments
 
 import time
 
 
-# create tables
 for _ in range(10):
     try:
         models.Base.metadata.create_all(bind=engine)
@@ -61,3 +60,4 @@ app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(likes.router)
 app.include_router(comments.router)
+app.include_router(profile_pic.router)

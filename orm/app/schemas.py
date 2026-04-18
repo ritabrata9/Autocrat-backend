@@ -10,6 +10,9 @@ class UserCreate(UserBase):
 
 class UserOut(UserBase):
     id: int
+    email: str
+    bio: str
+    profile_picture_url: Optional[str] = None
     
     # Tells Pydantic to read data from SQLAlchemy model attributes
     model_config = ConfigDict(from_attributes=True)

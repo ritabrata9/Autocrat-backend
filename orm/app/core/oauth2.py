@@ -4,12 +4,13 @@ from jose import JWTError, jwt
 # timedelta sets expiration duration
 from datetime import datetime, timedelta, timezone
 
+from app.db import database
 from app.schemas import TokenData
 from fastapi import Depends, HTTPException
 
 # extracts token from req
 from fastapi.security import OAuth2PasswordBearer
-from app import database, models
+from app.db import models
 from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')

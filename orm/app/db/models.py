@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, text, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database import Base
+from app.db.database import Base
 
 
 class Post(Base):
@@ -26,6 +26,7 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     role     = Column(String, nullable=False, server_default="USER")  # USER / ADMIN
     bio = Column(String, nullable=False, server_default="I am an Autocrat User")
+    profile_picture_url = Column(String, nullable=True)
 
 class Votes(Base):
     __tablename__ = "votes"

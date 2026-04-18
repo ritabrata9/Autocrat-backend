@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session, joinedload
-from app.database import get_db
-from app import models, oauth2
+from app.db.database import get_db
+from app.core import oauth2
+from app.db import models
 from app.schemas import CommentIn
 from fastapi import HTTPException, Depends, APIRouter, status
-from app.models import Post, Comments
+from app.db.models import Post, Comments
 
 router = APIRouter(
     prefix="/comments", 
