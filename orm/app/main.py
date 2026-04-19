@@ -54,6 +54,10 @@ def debug_db(db: Session = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 
 app.include_router(posts.router)
 app.include_router(users.router)
